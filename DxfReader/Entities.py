@@ -1,13 +1,13 @@
 
 class EntityFactory:
 
-    __entity_type = {"LINE":"LineEntity","ARC":"ArcEntity","CIRCLE":"CircleEntity","ELLIPSE":"EllipseEntity"}
+    __entity_types = {"LINE":"LineEntity","ARC":"ArcEntity","CIRCLE":"CircleEntity","ELLIPSE":"EllipseEntity"}
 
     @staticmethod
     def CreateEntity(type, entity_content):
         entity = None
-        if type in EntityFactory.__entity_type:
-            entity = eval(EntityFactory.__entity_type[type]+"(type,entity_content)")
+        if type in EntityFactory.__entity_types:
+            entity = eval(EntityFactory.__entity_types[type]+"(type,entity_content)")
         return entity
 
 
@@ -27,7 +27,7 @@ class LineEntity(Entity):
     def parse(self):
         content_copy = self.content.copy()
         # 起始位置x0... 结束位置x1.... 拉伸量tensile_x....
-        shape = {'type': "line", "x0": '', 'y0': '', 'z0': '', 'x1': '', 'y1': '', 'z1': '', "tensile_x": '0',
+        shape = {'type': "line", 'layer': '',"x0": '', 'y0': '', 'z0': '', 'x1': '', 'y1': '', 'z1': '', "tensile_x": '0',
                 'tensile_y': '0',
                 'tensile_z': '1'}
         while len(content_copy)!= 0:
@@ -45,6 +45,8 @@ class LineEntity(Entity):
                 shape['y1'] = float(value)
             elif code == ' 31':
                 shape['z1'] = float(value)
+            elif code == '  8':
+                shape['layer'] = value
             elif code == '210':
                 shape['tensile_x'] = float(value)
             elif code == '220':
@@ -61,7 +63,7 @@ class ArcEntity(Entity):
     def parse(self):
         content_copy = self.content.copy()
         # 圆心x... 半径r 起始角angle_0 结束角angle_1 拉伸量tensile_x....
-        shape = {'type': "arc", "x": '', 'y': '', 'z': '', 'r': '', 'angle_0': '', 'angle_1': '', "tensile_x": '0',
+        shape = {'type': "arc" , 'layer': '', "x": '', 'y': '', 'z': '', 'r': '', 'angle_0': '', 'angle_1': '', "tensile_x": '0',
                  'tensile_y': '0',
                  'tensile_z': '1'}
         while len(content_copy) != 0:
@@ -79,6 +81,8 @@ class ArcEntity(Entity):
                 shape['angle_0'] = float(value)
             elif code == ' 51':
                 shape['angle_1'] = float(value)
+            elif code == '  8':
+                shape['layer'] = value
             elif code == '210':
                 shape['tensile_x'] = float(value)
             elif code == '220':
@@ -94,7 +98,7 @@ class CircleEntity(Entity):
     def parse(self):
         content_copy = self.content.copy()
         # 圆心x0... 半径r 拉伸量tensile_x....
-        shape = {'type': 'circle', "x": '', 'y': '', 'z': '', "tensile_x": '0', 'tensile_y': '0',
+        shape = {'type': 'circle', 'layer': '', "x": '', 'y': '', 'z': '', "tensile_x": '0', 'tensile_y': '0',
                 'tensile_z': '1'}
         while len(content_copy) != 0:
             code = content_copy.pop(0)
@@ -107,6 +111,8 @@ class CircleEntity(Entity):
                 shape['z'] = float(value)
             elif code == ' 40':
                 shape['r'] = float(value)
+            elif code == '  8':
+                shape['layer'] = value
             elif code == '210':
                 shape['tensile_x'] = float(value)
             elif code == '220':
@@ -122,7 +128,7 @@ class EllipseEntity(Entity):
     def parse(self):
         content_copy = self.content.copy()
         # 圆心x... 长轴相对于圆心的坐标x_l.... 起始和结束角度start,end  长轴和短轴的比例k  拉伸量tensile_x....
-        shape = {'type': "ellipse", "x": '', 'y': '', 'z': '', 'x_l': '', 'y_l': '', 'z_l': '', 'k': '', 'start': '', 'end': '', "tensile_x": '0',
+        shape = {'type': "ellipse", 'layer': '', "x": '', 'y': '', 'z': '', 'x_l': '', 'y_l': '', 'z_l': '', 'k': '', 'start': '', 'end': '', "tensile_x": '0',
                  'tensile_y': '0',
                  'tensile_z': '1'}
         while len(content_copy) != 0:
@@ -146,6 +152,8 @@ class EllipseEntity(Entity):
                 shape['start'] = float(value)
             elif code == ' 42':
                 shape['end'] = float(value)
+            elif code == '  8':
+                shape['layer'] = value
             elif code == '210':
                 shape['tensile_x'] = float(value)
             elif code == '220':

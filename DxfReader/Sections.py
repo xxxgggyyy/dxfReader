@@ -1,4 +1,5 @@
 from DxfReader.Entities import EntityFactory
+from DxfReader.Tables import TableFactory
 
 class Section:
 
@@ -53,6 +54,30 @@ class HeaderSection(Section):
 class TablesSection(Section):
     def __init__(self, type, section_content):
         Section.__init__(self, type, section_content)
+
+    def ParseTables(self, type=None):
+        tables = []
+        content_copy = self.content.copy()
+        while len(content_copy) != 0:
+            code = content_copy.pop(0)
+            value = content_copy.pop(0)
+            if code == "  0" and value == "TABLE":#一张表的开始
+                content_copy.pop(0)#必是2 丢弃
+                table_type = content_copy.pop(0)
+                if type and type != table_type:
+                    continue
+                content = []
+                while len(content_copy) != 0:
+                    _code = content_copy.pop(0)
+                    _value = content_copy.pop(0)
+                    if _code == "  0" and _value == "ENDTAB":#一张表结束
+                        break
+                    content.append(_code)
+                    content.append(_value)
+                table = TableFactory.CreateTable(table_type, content)
+                if table:  # 同样的，还没有编写的类型，返回的None直接忽略
+                    tables.append(table)
+        return tables
 
 class SectionFactory:
 
