@@ -6,40 +6,54 @@ class DxfReader:
         self.filename = filename
 
     @staticmethod
-    def __get_value(value):#主要是用ansi解码是可能会出错
+    def __trans_value(value):#主要是用ansi解码是可能会出错
         try:
             value = str(value, encoding="ansi")  # 这里有可能会出错
         except Exception as e:
             value = str(value)
-        return value.replace("\r\n", "")
+        value = value.replace("\r\n", "")
+        value = value.replace("\n", "")
+        value = value.replace("\r", "")
 
-    def GetSections(self, type=None):
+        return value
+
+    def ParseSections(self, type=None):
         sections = []
         with open(self.filename, 'rb') as f:
             while True:
-                code = DxfReader.__get_value(f.readline())
-                value = DxfReader.__get_value(f.readline())  # str(f.readline(), encoding="ansi")
+                code = f.readline()
                 if not code:#文件尾
                     break
+                value = f.readline()  # str(f.readline(), encoding="ansi")
+                if not value:#不是偶数行
+                    raise Exception("文件已损坏")
+
                 #读取 0 SECTION (紧跟着2 type)和 0 ENDSEC 之间的内容为一个Section
-                if code == "  0" and value == "SECTION":
+                if DxfReader.__trans_value(code) == "  0" and DxfReader.__trans_value(value) == "SECTION":
                     #段开始 先读取段的类型
                     f.readline()#必然是2 丢弃
-                    section_type = DxfReader.__get_value(f.readline())#Section的type 可能值：ENTITIES HEADER TABLES BLOCKS
-                    if type and section_type!=type:
+                    section_type = f.readline()#Section的type 可能值：ENTITIES HEADER TABLES BLOCKS
+                    if not section_type:
+                        raise Exception("文件已损坏")
+                    if type and DxfReader.__trans_value(section_type)!=type:
                         continue
-                    content = dict()
+                    content = []
                     while True:
-                        endcode = DxfReader.__get_value(f.readline())
-                        endvalue = DxfReader.__get_value(f.readline())
-                        if endcode == "  0" and endvalue=="ENDSEC":#读到段尾
+                        endcode = f.readline()
+                        endvalue = f.readline()
+                        trans_endcode = DxfReader.__trans_value(endcode)
+                        trans_endvalue = DxfReader.__trans_value(endvalue)
+                        if not endvalue:
+                            raise Exception("文件已损坏")
+                        if trans_endcode == "  0" and trans_endvalue == "ENDSEC":#读到段尾
                             break
-                        content[endcode] = endvalue
-                    section = SectionFactory.CreateSection(section_type, content)
+                        content.append(trans_endcode)
+                        content.append(trans_endvalue)#section的内容保存为了数组
+                    section = SectionFactory.CreateSection(DxfReader.__trans_value(section_type), content)
                     # 对于还没有实现的type类型直接跳过
                     if section:
                         sections.append(section)
-            return sections
+        return sections
 
 
 

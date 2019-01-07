@@ -6,7 +6,9 @@ class DxfReaderTest(unittest.TestCase):
     def test_GetSections(self):
         print("______sections_start_________")
         dxfReader = DxfReader("DxfReader/test/test.dxf")
-        for section in dxfReader.GetSections():
+        sections = dxfReader.ParseSections()
+        print(len(sections))
+        for section in sections:
             print()
             print("section_start______")
             print(section)
