@@ -55,13 +55,31 @@ class DxfReader:
                         sections.append(section)
         return sections
 
+    @staticmethod
+    def GetShapeData(fileName, type):
+        from DxfReader.Sections import EntitiesSection
+        result = []
+        dxfReader = DxfReader(fileName)
+        sections = dxfReader.ParseSections()
+        for section in sections:
+            if isinstance(section, EntitiesSection):
+                entities = section.ParseEntities(type)
+                for entity in entities:
+                    result.append(entity.parse())
+                return result
 
-
-    def GetCircles(self):
-        pass
-
-    def GetArcs(self):
-        pass
-
-    def GetLines(self):
-        pass
+    @staticmethod
+    def GetLayers(fileName):
+        from DxfReader.Sections import TablesSection
+        from DxfReader.Tables import Table
+        dxfReader = DxfReader(fileName)
+        sections = dxfReader.ParseSections()
+        result = []
+        for section in sections:
+            if isinstance(section, TablesSection):
+                tables = section.ParseTables(Table.LAYER)
+                for table in tables:
+                    entries = table.ParseEntries()
+                    for entry in entries:
+                        result.append(entry.parse())
+                    return result
