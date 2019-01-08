@@ -1,37 +1,49 @@
-# dxfReader
-
-#### 介绍
-用来提取CAD中的dxf文件格式所保存的图像信息
-
-#### 软件架构
-软件架构说明
+### dxfReader
 
 
-#### 安装教程
+ **介绍** 
+- 这里是列表文本用来解析,提取CAD中的dxf文件格式所保存的图像信息
 
-1. xxxx
-2. xxxx
-3. xxxx
+ **软件架构** 
+- 主要采用简单工厂模式：
 
-#### 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. SectionFactory
+1. TableFactory
+1. EntityFactory
 
-#### 参与贡献
+
+方便扩展还未解析的类型
+
+
+ **安装教程** 
+- python3.X
+ **使用说明** 
+- 基本用法:
+
+```
+dxfReader = DxfReader("DxfReader/test/坡口图-2004版.dxf")
+sections = dxfReader.ParseSections()
+for section in sections:
+    if isinstance(section, HeaderSection):
+        vars = section.ParseVars()#解析出一个 cad 变量的 字典
+    if isinstance(section,EntitiesSection):
+        entities = section.ParseEntities()#解析出各种类型的实体,圆形，直线，弧形，椭圆
+        for entity in entities:#每种实体都可调用parse解析出一个带有实际数据的字典
+            print(entity.parse())#如直线的{'type': 'line', 'layer': '0', 'x0': -111.6999999999999, 'y0': -6.0, 'z0': 0.0, 'x1': -101.7, 'y1': -6.0, 'z1': 0.0, 'tensile_x': '0', 'tensile_y': '0', 'tensile_z': '1'}
+    if isinstance(section, TablesSection):
+        tables = section.ParseTables()
+        for table in tables:
+            entries = table.ParseEntries()
+            for entry in entries:
+                print(entry.parse())#可以解析出dxf中的表段，现在只实现了提取图层的
+                #如{'type': 'layer', 'name': '轮廓'}
+```
+
+
+ **参与贡献** 
 
 1. Fork 本仓库
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
