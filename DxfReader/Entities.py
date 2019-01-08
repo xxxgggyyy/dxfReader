@@ -13,6 +13,11 @@ class EntityFactory:
 
 class Entity:
 
+    ARC = "ARC"
+    CIRCLE = "CIRCLE"
+    LINE = "LINE"
+    ELLIPSE = "ELLIPSE"
+
     def __init__(self, type, content):
         self.type = type
         self.content = content

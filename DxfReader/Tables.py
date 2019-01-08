@@ -13,6 +13,8 @@ class TableFactory:
 
 class Table:
 
+    LAYER = "LAYER"
+
     def __init__(self, type, content):
         self.type = type
         self.content = content
@@ -35,11 +37,11 @@ class LayerEntry(Entry):
 
     def parse(self):
         content_copy = self.content.copy()
-        layer = {'name': "未知图层名或者文件错误"}
+        layer = {'type': 'layer', 'name': "未知图层名或者文件错误"}
         while len(content_copy)!=0:
             code = content_copy.pop(0)
             value = content_copy.pop(0)
-            if code == "100" and value=="AcDbLayerTableRecord":
+            if code == "100" and value == "AcDbLayerTableRecord":
                 code = content_copy.pop(0)
                 value = content_copy.pop(0)
                 if code == "  2":

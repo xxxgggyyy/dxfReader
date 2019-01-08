@@ -51,6 +51,25 @@ class HeaderSection(Section):
     def __init__(self, type, section_content):
         Section.__init__(self, type, section_content)
 
+    def ParseVars(self):
+        #解析出一个cad变量字典
+        content_copy = self.content.copy()
+        vars = dict()
+        while len(content_copy) != 0:
+            code = content_copy.pop(0)
+            value = content_copy.pop(0)
+            if code == "  9":
+                vars[value] = dict()
+                while len(content_copy) != 0:
+                    if content_copy[0] != "  9":
+                        _code = content_copy.pop(0)
+                        _value = content_copy.pop(0)
+                        vars[value][_code] = _value
+                    else:
+                        break
+        return vars
+
+
 class TablesSection(Section):
     def __init__(self, type, section_content):
         Section.__init__(self, type, section_content)
