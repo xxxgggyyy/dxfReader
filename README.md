@@ -19,6 +19,21 @@
  **安装教程** 
 - python3.X
  **使用说明** 
+- 最简单的用法：
+
+```
+#提取圆弧 返回一个包含字典的数组
+DxfReader.GetShapeData("DxfReader/test/test.dxf", Entity.ARC)
+#提取直线
+DxfReader.GetShapeData("DxfReader/test/test.dxf", Entity.LINE)
+#提取圆
+DxfReader.GetShapeData("DxfReader/test/test.dxf", Entity.CIRCLE)
+#提取椭圆
+DxfReader.GetShapeData("DxfReader/test/test.dxf", Entity.ELLIPSE)
+#提取所有的图层名
+DxfReader.GetLayers("DxfReader/test/坡口图-2004版.dxf")
+```
+
 - 基本用法:
 
 ```
