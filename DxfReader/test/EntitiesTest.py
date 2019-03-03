@@ -1,7 +1,7 @@
 import unittest
-from DxfReader.DxfReader import DxfReader
-from DxfReader.Sections import EntitiesSection
-from DxfReader.Entities import LineEntity,ArcEntity,CircleEntity,EllipseEntity
+from ..DxfReader import DxfReader
+from ..Sections import EntitiesSection
+from ..Entities import LineEntity,ArcEntity,CircleEntity,EllipseEntity
 
 class EntitiesTest(unittest.TestCase):
 

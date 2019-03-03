@@ -1,5 +1,5 @@
-from DxfReader.Entities import EntityFactory
-from DxfReader.Tables import TableFactory
+from .Entities import EntityFactory
+from .Tables import TableFactory
 
 class Section:
 

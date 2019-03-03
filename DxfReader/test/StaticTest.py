@@ -1,6 +1,6 @@
 import unittest
-from DxfReader.DxfReader import DxfReader
-from DxfReader.Entities import Entity
+from ..DxfReader import DxfReader
+from ..Entities import Entity
 
 class StaticTest(unittest.TestCase):
 

@@ -1,1 +1,1 @@
-from DxfReader.DxfReader import DxfReader
+from .DxfReader import DxfReader

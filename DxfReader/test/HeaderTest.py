@@ -1,6 +1,6 @@
 import unittest
-from DxfReader.DxfReader import DxfReader
-from DxfReader.Sections import HeaderSection
+from ..DxfReader import DxfReader
+from ..Sections import HeaderSection
 
 class HeaderTest(unittest.TestCase):
 

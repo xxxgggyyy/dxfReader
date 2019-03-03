@@ -4,13 +4,16 @@
  **介绍** 
 - 这里是列表文本用来解析,提取CAD中的dxf文件格式所保存的图像信息
 
+ **环境**
+ * python36（在python35中会失效, 其他环境未测试）
+
  **软件架构** 
 - 主要采用简单工厂模式：
 
 
 1. SectionFactory
-1. TableFactory
-1. EntityFactory
+2. TableFactory
+3. EntityFactory
 
 
 方便扩展还未解析的类型

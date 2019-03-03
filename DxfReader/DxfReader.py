@@ -1,4 +1,4 @@
-from DxfReader.Sections import SectionFactory
+from .Sections import SectionFactory
 
 class DxfReader:
 
@@ -57,7 +57,7 @@ class DxfReader:
 
     @staticmethod
     def GetShapeData(fileName, type):
-        from DxfReader.Sections import EntitiesSection
+        from .Sections import EntitiesSection
         result = []
         dxfReader = DxfReader(fileName)
         sections = dxfReader.ParseSections()
@@ -70,8 +70,8 @@ class DxfReader:
 
     @staticmethod
     def GetLayers(fileName):
-        from DxfReader.Sections import TablesSection
-        from DxfReader.Tables import Table
+        from .Sections import TablesSection
+        from .Tables import Table
         dxfReader = DxfReader(fileName)
         sections = dxfReader.ParseSections()
         result = []
